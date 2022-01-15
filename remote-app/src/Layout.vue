@@ -1,30 +1,43 @@
 <template>
-  <div>
-    <header>Remote header</header>
+  <div class="wrapper">
+    <header-common />
     <main>
-      Button from host:
-      <suspense>
-        <my-button />
-        <template #fallback>
-          Error
-        </template>
-      </suspense>
+      <slot />
     </main>
-    <footer>Remote footer</footer>
+    <button @click="handleClickButton">Click me</button>
+    My counter {{ counter }}
+    <footer-common />
   </div>
 </template>
 
 <script>
-import { defineAsyncComponent } from 'vue'
+import HeaderCommon from './HeaderCommon'
+import FooterCommon from './FooterCommon'
+import { reactive, toRefs } from 'vue'
 
 export default {
   name: "Layout",
   components: {
-    MyButton: defineAsyncComponent(() => import('host/MyButton'))
+    HeaderCommon,
+    FooterCommon,
+  },
+  setup() {
+    const data = reactive({
+      counter: 0
+    })
+
+    const handleClickButton = () => {
+      data.counter++
+    }
+
+    return {
+      ...toRefs(data),
+
+      handleClickButton
+    }
   }
 }
 </script>
 
 <style scoped>
-
 </style>

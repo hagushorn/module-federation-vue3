@@ -19,10 +19,6 @@ module.exports = () => ({
   resolve: {
     extensions: ['.vue', '.jsx', '.js', '.json'],
     alias: {
-      // this isn't technically needed, since the default `vue` entry for bundlers
-      // is a simple `export * from '@vue/runtime-dom`. However having this
-      // extra re-export somehow causes webpack to always invalidate the module
-      // on the first HMR update and causes the page to reload.
       vue: '@vue/runtime-dom',
     },
   },
@@ -32,6 +28,21 @@ module.exports = () => ({
         test: /\.vue$/,
         use: 'vue-loader',
       },
+      {
+        test: /\.css$/,
+        exclude: /node_modules/,
+        use: [
+            'vue-style-loader',
+          { loader: 'css-loader', options: { esModule: false } }
+        ]
+      }
+      // {
+      //   test: /bootstrap\.js$/,
+      //   loader: 'bundle-loader',
+      //   options: {
+      //     lazy: true,
+      //   },
+      // },
     ],
   },
   plugins: [
@@ -41,10 +52,16 @@ module.exports = () => ({
       exposes: {
         './MyButton': './src/components/MyButton',
       },
+      remotes: {
+        layout: 'layout@http://localhost:3001/remoteEntry.js',
+      },
       shared: {
+        ...dependencies,
         vue: {
-          requiredVersion: '3.2.26',
+          eager: true,
           singleton: true,
+          requiredVersion: dependencies.vue,
+          strictVersion: true,
         },
       },
     }),
