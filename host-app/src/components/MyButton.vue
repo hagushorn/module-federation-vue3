@@ -1,5 +1,6 @@
 <template>
   <div>
+    I'm from host, but in remote Layout :)
     <button @click="handleCountAdd">Click me</button>
     <div>My counter {{ counter }}</div>
   </div>

@@ -4,8 +4,7 @@
     <main>
       <slot />
     </main>
-    <button @click="handleClickButton">Click me</button>
-    My counter {{ counter }}
+    <my-button />
     <footer-common />
   </div>
 </template>
@@ -13,29 +12,16 @@
 <script>
 import HeaderCommon from './HeaderCommon'
 import FooterCommon from './FooterCommon'
-import { reactive, toRefs } from 'vue'
+import { defineAsyncComponent } from 'vue'
 
 export default {
   name: "Layout",
   components: {
     HeaderCommon,
     FooterCommon,
+    MyButton: defineAsyncComponent(() => import('host/MyButton'))
   },
-  setup() {
-    const data = reactive({
-      counter: 0
-    })
-
-    const handleClickButton = () => {
-      data.counter++
-    }
-
-    return {
-      ...toRefs(data),
-
-      handleClickButton
-    }
-  }
+  setup() {}
 }
 </script>
 
